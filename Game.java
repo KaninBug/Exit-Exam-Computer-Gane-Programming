@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Random;
 
 public class Game {
     Playground pg = new Playground();
@@ -13,9 +14,9 @@ public class Game {
     JFrame game;
     JPanel gameZone;
     JLabel[][] label;
-    JButton back, swap;
+    JButton back, swap, randomBlocks ,clear;
     int[][] pointLabel;
-    int[][] drop = blocks.getL();
+    int[][] drop;
 
     Game() {
         game = new JFrame("Terttist");
@@ -33,7 +34,7 @@ public class Game {
         gameZone.setBackground(Color.BLACK);
         gameZone.setBounds(460, 0, 1000, 1080);
 
-        back = new JButton("back");
+        back = new JButton("Back");
         back.setBounds(0, 0, 100, 50);
         back.setFont(new Font(null, Font.PLAIN, 20));
         back.setFocusable(false);
@@ -41,27 +42,38 @@ public class Game {
         back.setFocusPainted(false);
         back.setBorder(new LineBorder(Color.BLACK));
 
-        swap = new JButton("swap");
-        swap.setBounds(0, 50, 100, 50);
+        swap = new JButton("Swap Blocks");
+        swap.setBounds(0, 50, 200, 50);
+        swap.setFont(new Font(null, Font.PLAIN, 20));
+        swap.setFocusable(false);
+        swap.setBackground(Color.WHITE);
+        swap.setFocusPainted(false);
+        swap.setBorder(new LineBorder(Color.BLACK));
 
+        randomBlocks = new JButton("Random Blocks");
+        randomBlocks.setBounds(0, 100, 200, 50);
+        randomBlocks.setFont(new Font(null, Font.PLAIN, 20));
+        randomBlocks.setFocusable(false);
+        randomBlocks.setBackground(Color.WHITE);
+        randomBlocks.setFocusPainted(false);
+        randomBlocks.setBorder(new LineBorder(Color.BLACK));
+
+        clear = new JButton("Clear Blocks");
+        clear.setBounds(0, 150, 200, 50);
+        clear.setFont(new Font(null, Font.PLAIN, 20));
+        clear.setFocusable(false);
+        clear.setBackground(Color.WHITE);
+        clear.setFocusPainted(false);
+        clear.setBorder(new LineBorder(Color.BLACK));
 
         playGround();
         buttonAction();
 
         game.add(back);
         game.add(swap);
+        game.add(randomBlocks);
+        game.add(clear);
         game.add(gameZone);
-
-
-        // drop = swap(drop);
-        // mixWithPlayGround(drop, 0, 0);
-        
-        
-        // for(int[] e : drop) {
-        //     System.out.println(Arrays.toString(e));
-        // }
-        
-        // checkColor();
     }
 
     void playGround() {
@@ -101,7 +113,7 @@ public class Game {
             for(int j = y; j < arr[0].length + y; j++) {
                 if(arr[a][b] == 1) {
                     pointLabel[i][j] = 0;
-                    pg.setColorLabel(x, y);
+                    pg.setDefaultColorLabel(x, y);
                 }
                 b++;
             }
@@ -110,7 +122,7 @@ public class Game {
         }
     }
 
-    int[][] swap(int[][] arr) {
+    int[][] swapShape(int[][] arr) {
         int[][] newDrop = new int[arr[0].length][arr.length];
         for(int i = 0; i < arr.length; i++) {
             for(int j = 0; j < arr[0].length; j++) {
@@ -134,6 +146,8 @@ public class Game {
         MyActionListener listener = new MyActionListener();
         back.addActionListener(listener);
         swap.addActionListener(listener);
+        randomBlocks.addActionListener(listener);
+        clear.addActionListener(listener);
     }
     private class MyActionListener implements ActionListener {
         @Override
@@ -144,23 +158,52 @@ public class Game {
                 game.dispose();
             }
             else if(source == swap) {
-                // for(int i = 0; i < drop.length; i++) {
-                //     for(int j = 0; j < drop[0].length; j++) {
-                //         pointLabel[i][j] = 0;
-                //         checkColor();
-                //     }
-                // }
                 clearPlayground(drop, 0, 0);
-                System.out.println("work");
-                drop = swap(drop);
+                drop = swapShape(drop);
                 for(int[] e1 : drop) {
                     System.out.println(Arrays.toString(e1));
                 }
                 mixWithPlayground(drop, 0, 0);
                 checkColor();
             }
+            else if(source == randomBlocks) {
+                if(drop != null) {
+                    clearPlayground(drop, 0, 0);
+                }
+                Random rand = new Random();
+                int n = rand.nextInt(7) + 1;
+                if(n == 1) {
+                    drop = blocks.getO();
+                }
+                else if(n == 2) {
+                    drop = blocks.getI();
+                }
+                else if(n == 3) {
+                    drop = blocks.getS();
+                }
+                else if(n == 4) {
+                    drop = blocks.getZ();
+                }
+                else if(n == 5) {
+                    drop = blocks.getL();
+                }
+                else if(n == 6) {
+                    drop = blocks.getJ();
+                }
+                else if(n == 7) {
+                    drop = blocks.getT();
+                }
+                System.out.println("Num = " + n);
+                mixWithPlayground(drop, 0, 0);
+                checkColor();
+            }
+            else if(source == clear) {
+                    clearPlayground(drop, 0, 0);
+            }
         }
     }
 
-
+    public static void main(String[] args) {
+        Game g = new Game();
+    }
 }

@@ -158,15 +158,15 @@ public class Playground {
         return arrLabels;
     }
 
-    public void setColorLabel(int x, int y) {
-        if(haveColor[x][y] == true) {
-            arrLabels[x][y].setBackground(Color.BLACK);
-            haveColor[x][y] = false;
-        }
-        else {
-            arrLabels[x][y].setBackground(Color.YELLOW);
-            haveColor[x][y] = true;
-        }
+    public void setColorLabel(int x, int y) {            
+        arrLabels[x][y].setBackground(Color.ORANGE);
         arrLabels[x][y].setOpaque(true);
+        haveColor[x][y] = true;
+    }
+
+    public void setDefaultColorLabel(int x, int y) {
+        arrLabels[x][y].setBackground(Color.BLACK);
+        arrLabels[x][y].setOpaque(true);
+        haveColor[x][y] = false;
     }
 }
